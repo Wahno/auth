@@ -3,7 +3,6 @@ package com.hao0129.cloud.auth.entity;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.annotation.JSONField;
-import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,15 +13,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Data
 public class UserAccount implements UserDetails, Serializable {
 
     public enum AUTHORITY {
-        ROOT, ADMIN, USER
+        ROOT, ADMIN, USER,SERVICE
     }
 
     @JSONField(name = "NAME")
-    private String name;                      //用户ID
+    private String name;                    //用户ID
     @JSONField(name = "PASSWORD", serialize = false)
     private String password;                //用户密码
     @JSONField(name = "AUTHORITY")
@@ -56,6 +54,11 @@ public class UserAccount implements UserDetails, Serializable {
             grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_"+authority));//默认是ROLE_开头
         }
         return grantedAuthorities;
+    }
+
+    @Override
+    public String getPassword() {
+        return this.password;
     }
 
     @Override
