@@ -3,6 +3,7 @@ package com.hao0129.cloud.auth.service;
 import com.hao0129.cloud.auth.entity.UserAccount;
 import com.hao0129.cloud.auth.mapper.UserAccountMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,6 +21,14 @@ public class UserAccountService implements UserDetailsService {
         if (userAccount == null) {
             throw new UsernameNotFoundException("用户名：" + name + "不存在");
         }
-        return userAccount;
+        return new User(
+                userAccount.getName(),
+                userAccount.getPassword(),
+                userAccount.getEnabled(),
+                userAccount.getAccountNonExpired(),
+                userAccount.getCredentialsNonExpired(),
+                userAccount.getAccountNonLocked(),
+                userAccount.getAuthorities()
+        );
     }
 }

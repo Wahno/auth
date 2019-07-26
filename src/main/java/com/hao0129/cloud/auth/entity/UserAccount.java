@@ -3,9 +3,9 @@ package com.hao0129.cloud.auth.entity;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.annotation.JSONField;
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -13,7 +13,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class UserAccount implements UserDetails, Serializable {
+@Data
+public class UserAccount implements Serializable {
 
     public enum AUTHORITY {
         ROOT, ADMIN, USER,SERVICE
@@ -45,7 +46,6 @@ public class UserAccount implements UserDetails, Serializable {
         }
     }
 
-    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         JSONArray authorityArray = JSON.parseArray(this.authority);
         List<String> authorityList= authorityArray.toJavaList(String.class);
@@ -54,35 +54,5 @@ public class UserAccount implements UserDetails, Serializable {
             grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_"+authority));//默认是ROLE_开头
         }
         return grantedAuthorities;
-    }
-
-    @Override
-    public String getPassword() {
-        return this.password;
-    }
-
-    @Override
-    public String getUsername() {
-        return this.name;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return this.accountNonExpired;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return this.accountNonLocked;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return this.credentialsNonExpired;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return this.enabled;
     }
 }
